@@ -1,0 +1,51 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*---GAME CSS---*/
+#gameField td {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+/*DEFAULT THEME*/
+.HeroClass {
+  background-image: url('./img/john.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+}
+.VillainClass {
+  background-image: url('./img/robot.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+}
+
+.HeroClass.damaged {
+  background-image: url('./img/explosion.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+}
+.VillainClass.damaged {
+  background-image: url('./img/robot_crashed.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+}
+
+/*ARROW CSS*/
+.arrowClass:hover {
+  background-color: #fbff87;
+}
