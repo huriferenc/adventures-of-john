@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+body,
+html {
+  height: 100vh;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -13,6 +18,38 @@ body {
 
 a {
   text-decoration: none;
+}
+
+select {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em 2em;
+  gap: 10px;
+}
+
+.container > * {
+  flex: 1 100%;
+}
+
+.navigation {
+  width: 100%;
+  text-align: right;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.buttons {
+  padding-top: 15px;
 }
 
 /*---GAME CSS---*/

@@ -5,7 +5,7 @@ function isEmpty(obj) {
 $(document).ready(function () {
   $('#btnNew').on('click', newGame);
   $('#btnTeleport').on('click', teleportHero);
-  $(document).on('keydown', move);
+  $(document).on('keyup', keyPressHandler);
   $(document).on('click', mouseMove);
 });
 
@@ -30,7 +30,7 @@ function newGame() {
   gameOver = false;
   Hero = {};
   Villains = [];
-  stepNumber = Number.parseInt($('#txtL').val(), 10);
+  stepNumber = 0;
 
   $('#gameField').html(generateTable(n));
   if (!success) {
@@ -264,7 +264,7 @@ function draw() {
 
         PlaceIt(Hero.x, Hero.y, 'HeroID', heroTheme + ' damaged');
 
-        game_over(e, 'Game over!');
+        game_over('Game over!');
       }
     }
   }
@@ -298,48 +298,58 @@ function draw() {
     }
   }
 }
-function move(e) {
-  const keys = [37, 39, 38, 40];
+function keyPressHandler(e) {
   const keyCode = e.which;
-  Hero.directionx = 0;
-  Hero.directiony = 0;
 
-  if (keys.indexOf(keyCode) !== -1) {
-    if (keyCode === 37) {
-      if (Hero.x > 1) {
-        Hero.directionx = -1;
-      } else {
-        Hero.directionx = 0;
-      }
-    } else if (keyCode === 39) {
-      if (Hero.x < n) {
-        Hero.directionx = 1;
-      } else {
-        Hero.directionx = 0;
-      }
-    } else if (keyCode === 38) {
-      if (Hero.y > 1) {
-        Hero.directiony = -1;
-      } else {
-        Hero.directiony = 0;
-      }
-    } else if (keyCode === 40) {
-      if (Hero.y < n) {
-        Hero.directiony = 1;
-      } else {
-        Hero.directiony = 0;
-      }
-    }
-    if (!gameOver) {
-      update();
-      draw();
-      checkDamagedVillains(e);
-      viewStepsInForm();
-    }
-    disableScrolling(e);
+  const moveKeys = [37, 39, 38, 40];
+
+  if (moveKeys.includes(keyCode)) {
+    move(keyCode, e);
+  } else if (keyCode === 78) {
+    newGame();
+  } else if (keyCode === 84) {
+    teleportHero(e);
   }
 
   return true;
+}
+
+function move(keyCode, e) {
+  Hero.directionx = 0;
+  Hero.directiony = 0;
+
+  if (keyCode === 37) {
+    if (Hero.x > 1) {
+      Hero.directionx = -1;
+    } else {
+      Hero.directionx = 0;
+    }
+  } else if (keyCode === 39) {
+    if (Hero.x < n) {
+      Hero.directionx = 1;
+    } else {
+      Hero.directionx = 0;
+    }
+  } else if (keyCode === 38) {
+    if (Hero.y > 1) {
+      Hero.directiony = -1;
+    } else {
+      Hero.directiony = 0;
+    }
+  } else if (keyCode === 40) {
+    if (Hero.y < n) {
+      Hero.directiony = 1;
+    } else {
+      Hero.directiony = 0;
+    }
+  }
+  if (!gameOver) {
+    update();
+    draw();
+    checkDamagedVillains(e);
+    viewStepsInForm();
+  }
+  disableScrolling(e);
 }
 
 function mouseMove(e) {
@@ -410,7 +420,7 @@ function teleportHero(e) {
 function TeleportUpdate() {
   if (t >= 0) {
     //$('#btnTeleport').disabled = false;
-    $('#btnTeleport').val('Teleport Number (' + t + ')');
+    $('#btnTeleport').html('<b><u>T</u></b>eleport now! (' + t + ')');
   }
 }
 
@@ -438,7 +448,7 @@ function samePositionWithVillain(New_poz) {
 function TeleportListener() {
   if (t > 0) {
     //$('#btnTeleport').disabled = false;
-    $('#btnTeleport').val('Teleport Number (' + t + ')');
+    $('#btnTeleport').html('<b><u>T</u></b>eleport now! (' + t + ')');
   } else {
     //$('#btnTeleport').disabled = true;
   }
@@ -449,15 +459,16 @@ function viewStepsInForm() {
   if (!!score_input.length) score_input.val(stepNumber);
 }
 
-function game_over(e, text) {
-  alert(text);
-  gameOver = true;
-  if (success) {
-    k += 10;
-    newGame();
-  } else {
-    return false;
-  }
+function game_over(text) {
+  // To fix when add explosion animation into CSS
+  setTimeout(() => {
+    alert(text);
+    gameOver = true;
+    if (success) {
+      k = Math.min(Math.floor((n * n) / 5), k + 10);
+      newGame();
+    }
+  }, 100);
 }
 
 function disableScrolling(e) {
@@ -474,7 +485,7 @@ function checkDamagedVillains(e) {
 
     if (i == Villains.length) {
       success = true;
-      game_over(e, 'You won!');
+      game_over('You won!');
     }
   }
 }
