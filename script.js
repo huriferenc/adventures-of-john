@@ -43,8 +43,8 @@ function newGame() {
 
   Hero = {
     id: 'JID',
-    x: random(n, 1),
-    y: random(n, 1),
+    x: random(1, n),
+    y: random(1, n),
     ds: 1,
     directionx: 0, //-1, 0, 1
     directiony: 0, //-1, 0, 1
@@ -56,8 +56,8 @@ function newGame() {
     let rob_x = 1;
     let rob_y = 1;
     do {
-      rob_x = random(n, 1);
-      rob_y = random(n, 1);
+      rob_x = random(1, n);
+      rob_y = random(1, n);
     } while (samePositionWithHero({ x: rob_x, y: rob_y }, Hero, Villains));
     Villains[i] = {
       id: i,
@@ -105,9 +105,10 @@ function setArrows() {
     }
   }
 }
-function random(n, p) {
-  p = !isNaN(p) ? p : 0;
-  return Math.floor(Math.random() * 10 + p);
+function random(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 function samePositionWithHero(Villain_poz, Hero, Villains) {
   let ret = true;
@@ -401,12 +402,12 @@ function teleportHero(e) {
     let new_y = 1;
     if (t > 0) {
       do {
-        new_x = random(n, 1);
-        new_y = random(n, 1);
+        new_x = random(1, n);
+        new_y = random(1, n);
       } while (samePositionWithVillain({ x: new_x, y: new_y }));
     } else {
-      new_x = random(n, 1);
-      new_y = random(n, 1);
+      new_x = random(1, n);
+      new_y = random(1, n);
     }
     update({ x: new_x, y: new_y });
     draw();
